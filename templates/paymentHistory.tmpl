@@ -1,0 +1,49 @@
+{{ define "paymentHistory.tmpl" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>InstaPay server app</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+{{ template "comm_navbar.html" }}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      {{ template "client_menu.html" }}
+    </div>
+    <div class="col-md-10">
+      <h1>Payment History</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Sender</th>
+            <th>Receiver</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range $i, $history := .history }}
+            <tr>
+              <td>{{ $history.Sender }}</td>
+              <td>{{ $history.Receiver }}</td>
+              <td>{{ $history.Amount }}</td>
+              <td>{{ $history.Status }}</td>
+            </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+{{end}}
