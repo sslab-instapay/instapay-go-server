@@ -1,4 +1,4 @@
-{{ define "paymentHistory.tmpl" }}
+{{ define "history.tmpl" }}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +19,7 @@
       {{ template "client_menu.html" }}
     </div>
     <div class="col-md-10">
-      <h1>Payment History</h1>
+      <h1>Payment Histories</h1>
       <table class="table">
         <thead>
           <tr>
@@ -30,12 +30,12 @@
           </tr>
         </thead>
         <tbody>
-          {{ range $i, $history := .history }}
+          {{ range $i, $histories := .histories }}
             <tr>
-              <td>{{ $history.Sender }}</td>
-              <td>{{ $history.Receiver }}</td>
-              <td>{{ $history.Amount }}</td>
-              <td>{{ $history.Status }}</td>
+              <td>{{ $histories.From }}</td>
+              <td>{{ $histories.To }}</td>
+              <td>{{ $histories.Amount }}</td>
+              <td>{{ $histories.Status }}</td>
             </tr>
           {{ end }}
         </tbody>

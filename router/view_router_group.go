@@ -32,5 +32,15 @@ func RegisterViewRouter(router *gin.Engine) {
 
 			context.HTML(http.StatusOK, "channel.tmpl", gin.H { "channels": channels })
 		})
+
+		viewRouter.GET("histories/list", func(context *gin.Context) {
+
+			histories, err := repository.GetPaymentList()
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			context.HTML(http.StatusOK, "history.tmpl", gin.H { "histories": histories })
+		})
 	}
 }

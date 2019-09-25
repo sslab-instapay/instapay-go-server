@@ -61,7 +61,7 @@ func SearchPath(pn int64, amount int64) ([]string, map[string]pbClient.AgreeRequ
   w["0x0b4161ad4f49781a821C308D672E6c669139843C"] = rqm2
 
   var cps3 []*pbClient.ChannelPayment
-  cps3 = append(cps1, &pbClient.ChannelPayment{ChannelId: channelID2, Amount: amount})
+  cps3 = append(cps3, &pbClient.ChannelPayment{ChannelId: channelID2, Amount: amount})
   rqm3 := pbClient.AgreeRequestsMessage{
     PaymentNumber: pn,
     ChannelPayments: &pbClient.ChannelPayments{ChannelPayments: cps3},

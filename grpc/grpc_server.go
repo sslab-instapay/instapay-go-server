@@ -30,9 +30,8 @@ func WrapperAgreementRequest(pn int64, p []string, w map[string]pbClient.AgreeRe
 			log.Fatal(err)
 		}
 
-		serverAddr := (*info).IP + strconv.Itoa((*info).Port)
-
-		conn, err := grpc.Dial(serverAddr)
+		clientAddr := (*info).IP + ":" + strconv.Itoa((*info).Port)
+		conn, err := grpc.Dial(clientAddr, grpc.WithInsecure())
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -64,17 +63,14 @@ func WrapperAgreementRequest(pn int64, p []string, w map[string]pbClient.AgreeRe
 }
 
 func WrapperUpdateRequest(pn int64, p []string, w map[string]pbClient.AgreeRequestsMessage) {
-
-
 	for _, address := range p {
 		info, err := repository.GetClientInfo(address)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		serverAddr := (*info).IP + strconv.Itoa((*info).Port)
-
-		conn, err := grpc.Dial(serverAddr)
+		clientAddr := (*info).IP + ":" + strconv.Itoa((*info).Port)
+		conn, err := grpc.Dial(clientAddr, grpc.WithInsecure())
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -113,24 +109,32 @@ func WrapperUpdateRequest(pn int64, p []string, w map[string]pbClient.AgreeReque
 }
 
 func WrapperConfirmPayment(pn int, p []string) {
+	/* update payment's status */
+	_, err := repository.UpdatePaymentStatus(int(pn), "SUCCESS")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for _, address := range p {
 		info, err := repository.GetClientInfo(address)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		serverAddr := (*info).IP + strconv.Itoa((*info).Port)
-
-		conn, err := grpc.Dial(serverAddr)
+		clientAddr := (*info).IP + ":" + strconv.Itoa((*info).Port)
+		conn, err := grpc.Dial(clientAddr, grpc.WithInsecure())
 		defer conn.Close()
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		client := pbClient.NewClientClient(conn)
 		_, err = client.ConfirmPayment(context.Background(), &pbClient.ConfirmRequestsMessage{PaymentNumber: int64(pn)})
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		fmt.Println("======== Sent confirm to: " + clientAddr)
 	}
 }
 
@@ -182,7 +186,7 @@ func SearchPath(pn int64, amount int64) ([]string, map[string]pbClient.AgreeRequ
 	w["0x0b4161ad4f49781a821C308D672E6c669139843C"] = rqm2
 
 	var cps3 []*pbClient.ChannelPayment
-	cps3 = append(cps1, &pbClient.ChannelPayment{ChannelId: channelID2, Amount: amount})
+	cps3 = append(cps3, &pbClient.ChannelPayment{ChannelId: channelID2, Amount: amount})
 	rqm3 := pbClient.AgreeRequestsMessage{
 		PaymentNumber:   pn,
 		ChannelPayments: &pbClient.ChannelPayments{ChannelPayments: cps3},
