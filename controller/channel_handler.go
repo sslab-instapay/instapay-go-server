@@ -3,10 +3,10 @@ package controller
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"github.com/sslab-instapay/instapay-go-server/repository"
+		"github.com/sslab-instapay/instapay-go-server/repository"
 	"log"
 	"fmt"
+	"strconv"
 )
 
 func OpenChannelHandler(context *gin.Context)  {
@@ -33,10 +33,13 @@ func DirectPayChannelHandler(context *gin.Context) {
 }
 
 func CloseChannelHandler(context *gin.Context) {
-	channelId := context.PostForm("channelId")
-	channelObjectId, _ := primitive.ObjectIDFromHex(channelId)
+	channelId, err := strconv.Atoi(context.PostForm("channelId"))
 
-	channel, err := repository.GetChannelById(channelObjectId)
+	if err != nil{
+		log.Println(err)
+	}
+
+	channel, err := repository.GetChannelById(channelId)
 	if err != nil {
 		log.Fatal(err)
 	}

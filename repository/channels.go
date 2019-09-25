@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"github.com/sslab-instapay/instapay-go-server/model"
 	"github.com/sslab-instapay/instapay-go-server/db"
+	"log"
 )
 
 func GetChannelList() ([]model.Channel, error) {
@@ -37,6 +38,27 @@ func GetChannelList() ([]model.Channel, error) {
 	}
 
 	return channels, nil
+}
+
+func GetChannelById(channelId int) (model.Channel, error) {
+
+	database, err := db.GetDatabase()
+	if err != nil {
+		return model.Channel{}, err
+	}
+
+	filter := bson.M{
+		"cid": channelId,
+	}
+
+	collection := database.Collection("channels")
+
+	channel := model.Channel{}
+	singleRecord := collection.FindOne(context.TODO(), filter)
+	if err := singleRecord.Decode(&channel); err != nil {
+		log.Println(err)
+	}
+	return channel, nil
 }
 
 func PutChannelData(channelID int, from string, to string, deposit int) (*mongo.InsertOneResult, error) {
