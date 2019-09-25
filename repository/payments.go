@@ -57,7 +57,7 @@ func GetPaymentData(pn int) (*model.Payment, error) {
 	var pm model.Payment
 	err = cur.Decode(&pm)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	return &pm, nil
@@ -83,7 +83,7 @@ func UpdatePaymentAddrsSentAgr(pn int, address string) (*mongo.UpdateResult, err
 	var pm model.Payment
 	err = cur.Decode(&pm)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	pm.AddrsSentAgr = append(pm.AddrsSentAgr, address)
@@ -116,7 +116,7 @@ func UpdatePaymentAddrsSentUpt(pn int, address string) (*mongo.UpdateResult, err
 	var pm model.Payment
 	err = cur.Decode(&pm)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	pm.AddrsSentUpt = append(pm.AddrsSentUpt, address)

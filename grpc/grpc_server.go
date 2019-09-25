@@ -38,8 +38,10 @@ func WrapperAgreementRequest(pn int64, p []string, w map[string]pbClient.AgreeRe
 		}
 
 		defer conn.Close()
+
 		client := pbClient.NewClientClient(conn)
-		_, err = client.AgreementRequest(context.Background(), &w[address])
+		message := w[address]
+		_, err = client.AgreementRequest(context.Background(), &message)
 		if err != nil {
 			log.Println(err)
 		}
@@ -62,6 +64,7 @@ func WrapperAgreementRequest(pn int64, p []string, w map[string]pbClient.AgreeRe
 }
 
 func WrapperUpdateRequest(pn int64, p []string, w map[string]pbClient.AgreeRequestsMessage) {
+
 
 	for _, address := range p {
 		info, err := repository.GetClientInfo(address)
@@ -92,7 +95,7 @@ func WrapperUpdateRequest(pn int64, p []string, w map[string]pbClient.AgreeReque
 		}
 
 		// TODO 파라미터 오류
-		_, err = repository.UpdatePaymentAddrsSentUpt(int(pn), p, address)
+		_, err = repository.UpdatePaymentAddrsSentUpt(int(pn), address)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -30,7 +30,7 @@ func GetClientList() ([]model.Client, error) {
 		var client model.Client
 		err := cur.Decode(&client)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		// To get the raw bson bytes use cursor.Current
 		clients = append(clients, client)
@@ -59,7 +59,7 @@ func GetClientInfo(address string) (*model.Client, error) {
 	var info model.Client
 	err = cur.Decode(&info)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	return &info, nil
